@@ -1,3 +1,5 @@
 package: github.com/stephenwithav/keydroid
 import:
-- package: github.com/yosemite-open/go-adb
+- package: github.com/Sirupsen/logrus
+  version: ^1.0.5
+- package: github.com/eiannone/keyboard
