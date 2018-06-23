@@ -1,6 +1,24 @@
-hash: ab7ef887aca42fc8d5e2ef3e72acdaa7b55bccac1d0c7cc5b05055ef72ba3eae
-updated: 2018-06-23T07:36:52.415939841-04:00
+hash: d92f71732620a6c3c2daf18fe4fcc3594fe0406c0766a9365740a899e2896903
+updated: 2018-06-23T13:13:13.87745572-04:00
 imports:
+- name: github.com/eiannone/keyboard
+  version: 6d2a597fd0f1f80b2dfdab8e893792dbd9e2db45
+- name: github.com/franela/goreq
+  version: bcd34c9993f899273c74baaa95e15386cd97b6e7
+- name: github.com/Sirupsen/logrus
+  version: 75068beb13ada9c0ddde611f678523fda7352650
 - name: github.com/yosemite-open/go-adb
   version: bdf825a3d674b851cdfd7cf6831c259ba1794ee1
+  subpackages:
+  - internal/errors
+  - wire
+- name: golang.org/x/crypto
+  version: 81e90905daefcd6fd217b62423c0908922eadb30
+  subpackages:
+  - ssh/terminal
+- name: golang.org/x/sys
+  version: 95c6576299259db960f6c5b9b69ea52422860fce
+  subpackages:
+  - unix
+  - windows
 testImports: []
