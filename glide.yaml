@@ -1,0 +1,3 @@
+package: github.com/stephenwithav/keydroid
+import:
+- package: github.com/yosemite-open/go-adb

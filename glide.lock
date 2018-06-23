@@ -1,0 +1,6 @@
+hash: ab7ef887aca42fc8d5e2ef3e72acdaa7b55bccac1d0c7cc5b05055ef72ba3eae
+updated: 2018-06-23T07:36:52.415939841-04:00
+imports:
+- name: github.com/yosemite-open/go-adb
+  version: bdf825a3d674b851cdfd7cf6831c259ba1794ee1
+testImports: []
