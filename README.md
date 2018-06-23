@@ -18,6 +18,7 @@ Install [adb](https://developer.android.com/studio/command-line/adb).
 
 ```
 <space> - Select item; also, pause.
+<enter> - select item; also, pause.
       - - Turn volume down.
 	  = - Turn volume up.
 	  + - Turn volume up.
@@ -28,10 +29,12 @@ Install [adb](https://developer.android.com/studio/command-line/adb).
 	  a - Trigger voice assistant.
 	  b - Return to prevous screen.
 	  h - Move selection left.
+	  i - Insert text.
 	  j - Move selection down.
 	  k - Move selection up.
 	  l - Move selection right.
 	  m - Mute volume.
+	  q - Quit KeyDroid.
 	  t - TV timer button.
 	  v - TV power button.
 	  w - Wakeup Android device.
