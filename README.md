@@ -17,8 +17,10 @@ Install [adb](https://developer.android.com/studio/command-line/adb).
 ## Keybindings
 
 ```
+<bcksp> - Send Backspace key.
+<tab>   - Send Tab key.
 <space> - Select item; also, pause.
-<enter> - select item; also, pause.
+<enter> - Select item; also, pause.
       - - Turn volume down.
       = - Turn volume up.
       + - Turn volume up.
