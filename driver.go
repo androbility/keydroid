@@ -38,27 +38,24 @@ func New() (*Commander, error) {
 }
 
 func (c *Commander) Write(key Keycode) {
-	if code, ok := key.Event(); ok {
-		if _, err := c.in.Write(code); err != nil {
-			log.WithFields(log.Fields{
-				"error": err,
-				"key":   rune(key),
-			}).Error("KeyEvent send failed")
-		}
-
-		log.Info(strings.Trim(string(code), "\n"))
+	code, ok := key.Event()
+	if !ok {
+		log.WithFields(log.Fields{
+			"key": key.Rune(),
+		}).Error("Key not bound")
 
 		return
 	}
 
-	log.WithFields(log.Fields{
-		"key": key.Rune(),
-	}).Error("Key not bound")
-}
+	if _, err := c.in.Write(code); err != nil {
+		log.WithFields(log.Fields{
+			"error": err,
+			"key":   rune(key),
+		}).Error("KeyEvent send failed")
+	}
+	go c.touch()
 
-func (c *Commander) Exec(cmd string) error {
-	_, err := c.in.Write([]byte(cmd))
-	return err
+	log.Info(strings.Trim(string(code), "\n"))
 }
 
 func (c *Commander) Quit() {
