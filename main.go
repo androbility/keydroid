@@ -1,9 +1,6 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
 	"unicode"
 
 	log "github.com/Sirupsen/logrus"
@@ -16,38 +13,23 @@ func main() {
 		log.Fatalf("error connecting to adb server: %s\n\nDid you run adb connect?\n", err)
 	}
 
-	// For keyboard input
-	stdin := bufio.NewScanner(bufio.NewReader(os.Stdin))
-
 	for {
-		ch, _, err := keyboard.GetSingleKey()
+		ch, key, err := keyboard.GetSingleKey()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if unicode.IsSpace(ch) {
-			ch = '\n'
+		// Ctrl key values return [0, uint16], so convert the uint16
+		// to a rune.
+		if ch == 0 {
+			ch = rune(key)
 		}
 
-		switch ch {
-		case 'I', 'i':
-			log.Info("Begin input")
-			fmt.Print("> ")
-			stdin.Scan()
-			log.Infof("Sending: %s", stdin.Text())
-			err := cmndr.Exec(stdin.Text())
-			if err != nil {
-				log.Errorf("err: %s")
-			}
-		case 0:
-			log.Info("Pressed Enter")
-			if err := cmndr.Exec("input keyevent KEYCODE_ENTER\n"); err != nil {
-				log.Errorf("err: %s")
-			}
-		case 'Q', 'q':
+		// Quit on q, Q, and Ctrl-C.
+		if (unicode.ToLower(ch) == 'q') || (ch == '\x03') {
 			cmndr.Quit()
-		default:
-			cmndr.Write(Keycode(ch))
 		}
+
+		cmndr.Write(Keycode(ch))
 	}
 }
