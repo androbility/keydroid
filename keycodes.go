@@ -40,6 +40,7 @@ var (
 		'r': "KEYCODE_MEDIA_REWIND",
 		's': "KEYCODE_MEDIA_STOP",
 		't': "KEYCODE_TV_TIMER_PROGRAMMING",
+		'u': "KEYCODE_MENU",
 		'v': "KEYCODE_TV_POWER",
 		'w': "KEYCODE_WAKEUP",
 	}

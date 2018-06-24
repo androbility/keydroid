@@ -38,6 +38,7 @@ Install [adb](https://developer.android.com/studio/command-line/adb).
       r - Rewind.
 	  s - Stop.
       t - TV timer button.
+	  u - Menu.
       v - TV power button.
       w - Wakeup Android device.
 ```
