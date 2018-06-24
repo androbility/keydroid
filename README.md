@@ -36,9 +36,9 @@ Install [adb](https://developer.android.com/studio/command-line/adb).
       m - Mute volume.
       q - Quit KeyDroid.
       r - Rewind.
-	  s - Stop.
+      s - Stop.
       t - TV timer button.
-	  u - Menu.
+      u - Menu.
       v - TV power button.
       w - Wakeup Android device.
 ```
