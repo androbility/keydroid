@@ -28,13 +28,14 @@ Install [adb](https://developer.android.com/studio/command-line/adb).
       4 - Switch TV input to HDMI4.
       a - Trigger voice assistant.
       b - Return to prevous screen.
-      h - Move selection left.
+      f - Fast-forward.
       i - Insert text.
       j - Move selection down.
       k - Move selection up.
       l - Move selection right.
       m - Mute volume.
       q - Quit KeyDroid.
+      r - Rewind.
       t - TV timer button.
       v - TV power button.
       w - Wakeup Android device.
