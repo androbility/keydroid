@@ -5,13 +5,17 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
+	"time"
 
 	log "github.com/Sirupsen/logrus"
 )
 
 type Commander struct {
-	cmd *exec.Cmd
-	in  io.WriteCloser
+	cmd        *exec.Cmd
+	in         io.WriteCloser
+	lastActive time.Time
+	m          *sync.Mutex
 }
 
 func New() (*Commander, error) {
@@ -27,7 +31,10 @@ func New() (*Commander, error) {
 		return nil, err
 	}
 
-	return &Commander{cmd, stdin}, nil
+	cmndr := &Commander{cmd, stdin, time.Now(), &sync.Mutex{}}
+	go cmndr.keepAwake(149 * time.Second)
+
+	return cmndr, nil
 }
 
 func (c *Commander) Write(key Keycode) {
@@ -59,4 +66,23 @@ func (c *Commander) Quit() {
 	log.Info("Quitting")
 	c.cmd.Wait()
 	os.Exit(0)
+}
+
+// Ensure device stays awake.  Purpose: FireTV Cube.
+func (c *Commander) keepAwake(dur time.Duration) {
+	ch := time.Tick(dur)
+
+	for range ch {
+		c.touch()
+	}
+}
+
+func (c *Commander) touch() {
+	if now := time.Now(); now.Sub(c.lastActive) > time.Minute {
+		c.m.Lock()
+		defer c.m.Unlock()
+
+		c.Write(Keycode('w'))
+		c.lastActive = now
+	}
 }

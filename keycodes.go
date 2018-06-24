@@ -22,6 +22,7 @@ func (k Keycode) Rune() rune {
 var (
 	keymap = map[rune]string{
 		'\x08': "KEYCODE_BACK",
+		'\x09': "KEYCODE_TAB",
 		'\x0d': "KEYCODE_ENTER",
 		' ':    "KEYCODE_SPACE",
 		'-':    "KEYCODE_VOLUME_DOWN",
@@ -36,6 +37,7 @@ var (
 		'c':    "KEYCODE_CENTER",
 		'f':    "KEYCODE_MEDIA_FAST_FORWARD",
 		'h':    "KEYCODE_DPAD_LEFT",
+		'i':    "KEYCODE_TV_INPUT",
 		'j':    "KEYCODE_DPAD_DOWN",
 		'k':    "KEYCODE_DPAD_UP",
 		'l':    "KEYCODE_DPAD_RIGHT",
@@ -45,7 +47,7 @@ var (
 		's':    "KEYCODE_MEDIA_STOP",
 		't':    "KEYCODE_TV_TIMER_PROGRAMMING",
 		'u':    "KEYCODE_MENU",
-		'v':    "KEYCODE_TV_POWER",
+		'v':    "KEYCODE_VOICE_ASSIST",
 		'w':    "KEYCODE_WAKEUP",
 	}
 )
