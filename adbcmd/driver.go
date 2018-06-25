@@ -1,6 +1,7 @@
 package adbcmd
 
 import (
+	"errors"
 	"io"
 	"os"
 	"os/exec"
@@ -16,6 +17,7 @@ type Commander struct {
 	in         io.WriteCloser
 	lastActive time.Time
 	m          *sync.Mutex
+	ch         chan time.Time
 }
 
 func New() (*Commander, error) {
@@ -31,31 +33,47 @@ func New() (*Commander, error) {
 		return nil, err
 	}
 
-	cmndr := &Commander{cmd, stdin, time.Now(), &sync.Mutex{}}
-	go cmndr.keepAwake(149 * time.Second)
+	cmndr := &Commander{
+		cmd:        cmd,
+		in:         stdin,
+		lastActive: time.Now(),
+		m:          &sync.Mutex{},
+		ch:         make(chan time.Time),
+	}
+	go cmndr.ping(149 * time.Second)
 
 	return cmndr, nil
 }
 
-func (c *Commander) Write(key Keycode) {
+func (c *Commander) Write(key Keycode) error {
 	code, ok := key.Event()
 	if !ok {
 		log.WithFields(log.Fields{
 			"key": key.Rune(),
 		}).Error("Key not bound")
 
-		return
+		return nil
 	}
 
 	if _, err := c.in.Write(code); err != nil {
+		// Communication with the Android device failed.
 		log.WithFields(log.Fields{
 			"error": err,
 			"key":   rune(key),
 		}).Error("KeyEvent send failed")
+
+		// We can assume the server is down, or restarting.
+		// Let's close the channel, kill cmd, and quit.
+		defer close(c.ch)
+		defer c.cmd.Wait()
+
+		return errors.New("server connection lost")
 	}
 	go c.touch()
 
 	log.Info(strings.Trim(string(code), "\n"))
+
+	return nil
 }
 
 func (c *Commander) Quit() {
@@ -66,10 +84,8 @@ func (c *Commander) Quit() {
 }
 
 // Ensure device stays awake.  Purpose: FireTV Cube.
-func (c *Commander) keepAwake(dur time.Duration) {
-	ch := time.Tick(dur)
-
-	for range ch {
+func (c *Commander) ping(dur time.Duration) {
+	for range c.ch {
 		c.touch()
 	}
 }
@@ -82,4 +98,11 @@ func (c *Commander) touch() {
 		c.Write(Keycode('w'))
 		c.lastActive = now
 	}
+}
+
+// Wait for server to reconnect.
+func WaitForAndroid() {
+	log.Info("Waiting for a new adb connection.  (Hint: adb connect <ip[:port]>)")
+	exec.Command("adb", "wait-for-device").Run()
+	log.Info("Success!")
 }
