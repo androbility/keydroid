@@ -1,16 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"unicode"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/eiannone/keyboard"
+	"github.com/stephenwithav/keydroid/adbcmd"
 )
 
 func main() {
-	cmndr, err := New()
+	for {
+		adbcmd.WaitForAndroid()
+		err := Watch()
+		log.Error(err)
+	}
+}
+
+func Watch() error {
+	cmndr, err := adbcmd.New()
 	if err != nil {
-		log.Fatalf("error connecting to adb server: %s\n\nDid you run adb connect?\n", err)
+		return fmt.Errorf("error connecting to adb server: %s", err)
 	}
 
 	for {
@@ -30,6 +40,8 @@ func main() {
 			cmndr.Quit()
 		}
 
-		cmndr.Write(Keycode(ch))
+		if err = cmndr.Write(adbcmd.Keycode(ch)); err != nil {
+			return err
+		}
 	}
 }
