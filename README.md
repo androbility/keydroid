@@ -1,4 +1,32 @@
-# KeyDroid
+# Introduction
+
+KeyDroid lets you interact with your Android device from the terminal
+using adb, the Android Debug Bridge.
+
+It enables control of your Android devices, like the Fire TV Player
+and Google's Nexus player, from your cli.  A decent analogy is:
+
+    kodikeys:kodi::keydroid:android
+
+In contrast to kodikeys, which lets you communicate with kodi,
+keydroid lets you control the entire Android system; it also attempts
+to reconnect when the adb connection is lost.
+
+pre-1.0, the initial keybindings will be in flux and all debug
+messages will be shown.  At 0.4, all keybindings should be
+configurable.
+
+On a final note, I would like to create an organiation to house this
+project and all of the keymaps for different devices.  The keydroid
+account already exists on GitHub, so I am open to suggestions for new
+names.
+
+I created [TightPants](https://github.com/tightpants) as a Firefly reference, with a tp subrepo, but
+`tp` as a command to supervise connections to Android devices?
+Something better must exist.  If you can come up with a good
+alternative, I will link you (or your company/organization) in this
+README file forever.
+
 
 ## Installation
 
@@ -15,6 +43,26 @@ Install [adb](https://developer.android.com/studio/command-line/adb).
 
 
 ## Keybindings
+
+The keybindinds that should work on all Android devices are:
+
+```
+<bcksp> - Send Backspace key.
+<tab>   - Send Tab key.
+<space> - Select item; also, pause.
+<enter> - Select item; also, pause.
+      - - Turn volume down.
+      = - Turn volume up.
+      + - Turn volume up.
+      h - Move selection left.
+      j - Move selection down.
+      k - Move selection up.
+      l - Move selection right.
+      s - Stop.
+```
+
+
+The full, non-final list of default keybindings is:
 
 ```
 <bcksp> - Send Backspace key.
@@ -47,12 +95,6 @@ Install [adb](https://developer.android.com/studio/command-line/adb).
       v - Voice assistant.
       w - Wakeup Android device.
 ```
-
-
-## Warnings
-
-The TV bindings are hopeful, as my Fire TV Cube isn't properly
-configured for my TV yet.  That should be fixed soon.
 
 
 ## Contributors
