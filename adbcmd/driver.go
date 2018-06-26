@@ -17,7 +17,7 @@ type Commander struct {
 	in         io.WriteCloser
 	lastActive time.Time
 	m          *sync.Mutex
-	ch         chan time.Time
+	stopCh     chan interface{}
 }
 
 func New() (*Commander, error) {
@@ -38,9 +38,9 @@ func New() (*Commander, error) {
 		in:         stdin,
 		lastActive: time.Now(),
 		m:          &sync.Mutex{},
-		ch:         make(chan time.Time),
+		stopCh:     make(chan interface{}),
 	}
-	go cmndr.ping(149 * time.Second)
+	go cmndr.ping(179 * time.Second)
 
 	return cmndr, nil
 }
@@ -63,13 +63,12 @@ func (c *Commander) Write(key Keycode) error {
 		}).Error("KeyEvent send failed")
 
 		// We can assume the server is down, or restarting.
-		// Let's close the channel, kill cmd, and quit.
-		defer close(c.ch)
+		// Let's return an error, kill cmd, and close the channel.
+		defer close(c.stopCh)
 		defer c.cmd.Wait()
 
 		return errors.New("server connection lost")
 	}
-	go c.touch()
 
 	log.Info(strings.Trim(string(code), "\n"))
 
@@ -85,18 +84,21 @@ func (c *Commander) Quit() {
 
 // Ensure device stays awake.  Purpose: FireTV Cube.
 func (c *Commander) ping(dur time.Duration) {
-	for range c.ch {
-		c.touch()
-	}
-}
+	ticker := time.NewTicker(dur)
+	defer ticker.Stop()
 
-func (c *Commander) touch() {
-	if now := time.Now(); now.Sub(c.lastActive) > time.Minute {
-		c.m.Lock()
-		defer c.m.Unlock()
-
-		c.Write(Keycode('w'))
-		c.lastActive = now
+	for {
+		select {
+		case <-ticker.C:
+			if time.Since(c.lastActive) < dur {
+				break
+			}
+			c.m.Lock()
+			c.Write(Keycode('w'))
+			c.m.Unlock()
+		case <-c.stopCh:
+			return
+		}
 	}
 }
 
