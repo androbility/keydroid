@@ -23,7 +23,7 @@ func LoadConfigFile(configDir, defaultBindings string) {
 		if err = viper.ReadConfig(r); err != nil {
 			log.WithFields(log.Fields{
 				"error": err,
-			}).Fatal("Loading default configuration failed.")
+			}).Debug("Loading default configuration failed.  Please contact the developer.")
 		}
 	}
 
