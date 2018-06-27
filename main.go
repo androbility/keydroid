@@ -5,21 +5,21 @@ import (
 	"unicode"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/androbility/adbi"
 	"github.com/eiannone/keyboard"
-	"github.com/stephenwithav/keydroid/adbcmd"
 )
 
 func main() {
-	adbcmd.LoadConfigFile("$HOME/.keydroid", defaultBindings)
+	adbi.LoadConfigFile("$HOME/.keydroid", defaultBindings)
 	for {
-		adbcmd.WaitForAndroid()
+		adbi.WaitForAndroid()
 		err := Watch()
 		log.Error(err)
 	}
 }
 
 func Watch() error {
-	cmndr, err := adbcmd.New()
+	cmndr, err := adbi.New()
 	if err != nil {
 		return fmt.Errorf("error connecting to adb server: %s", err)
 	}
@@ -41,7 +41,7 @@ func Watch() error {
 			cmndr.Quit()
 		}
 
-		if err = cmndr.Write(adbcmd.Keycode(ch)); err != nil {
+		if err = cmndr.Write(adbi.Keycode(ch)); err != nil {
 			return err
 		}
 	}
