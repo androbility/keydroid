@@ -4,4 +4,4 @@ import:
   version: ^1.0.5
 - package: github.com/eiannone/keyboard
 - package: github.com/androbility/adbi
-  version: ^0.1.0
+  version: ^0.2.0
