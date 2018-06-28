@@ -10,15 +10,15 @@ import (
 )
 
 func main() {
-	adbi.LoadConfigFile("$HOME/.keydroid", defaultBindings)
+	bindings := adbi.LoadConfigFile("$HOME/.keydroid", defaultBindings)
 	for {
 		adbi.WaitForAndroid()
-		err := Watch()
+		err := Watch(bindings)
 		log.Error(err)
 	}
 }
 
-func Watch() error {
+func Watch(keymap map[rune]adbi.Keyevent) error {
 	cmndr, err := adbi.New()
 	if err != nil {
 		return fmt.Errorf("error connecting to adb server: %s", err)
@@ -41,7 +41,13 @@ func Watch() error {
 			cmndr.Quit()
 		}
 
-		if err = cmndr.Write(adbi.Keycode(ch)); err != nil {
+		// We need to lookup the
+		event, ok := keymap[ch]
+		if !ok {
+			continue
+		}
+
+		if err = cmndr.Signal(event); err != nil {
 			return err
 		}
 	}
