@@ -41,9 +41,21 @@ func Watch(keymap map[rune]adbi.Keyevent) error {
 			cmndr.Quit()
 		}
 
-		// We need to lookup the
+		// We need to lookup the key.  Is it defined?
 		event, ok := keymap[ch]
 		if !ok {
+			continue
+		}
+
+		// If KEYCODE_UNKNOWN, we need to send Raw instead of Signal.
+		if event == adbi.KEYCODE_UNKNOWN {
+			switch ch {
+			case 117:
+				cmndr.Raw("swipe 700 120 700 0")
+			case 100:
+				cmndr.Raw("swipe 700 0 700 120")
+			}
+
 			continue
 		}
 
@@ -78,12 +90,18 @@ var defaultBindings = `{
 		"l":    "KEYCODE_DPAD_RIGHT",
 		"m":    "KEYCODE_MUTE",
 		"o":    "KEYCODE_HOME",
+        "p":    "KEYCODE_MEDIA_PLAY_PAUSE",
 		"r":    "KEYCODE_MEDIA_REWIND",
 		"s":    "KEYCODE_MEDIA_STOP",
+		"S":    "KEYCODE_SLEEP",
 		"t":    "KEYCODE_TV_TIMER_PROGRAMMING",
 		"u":    "KEYCODE_MENU",
-		"v":    "KEYCODE_VOICE_ASSIST",
+		"v":    "KEYCODE_HELP",
 		"w":    "KEYCODE_WAKEUP"
-	}
+	},
+    "rawbindings": {
+		"U":    "swipe 700 120 700 0",
+		"D":    "swipe 700 0 700 120"
+    }
 }
 `
