@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"unicode"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/androbility/adbi"
 	"github.com/eiannone/keyboard"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -47,18 +47,6 @@ func Watch(keymap map[rune]adbi.Keyevent) error {
 			continue
 		}
 
-		// If KEYCODE_UNKNOWN, we need to send Raw instead of Signal.
-		if event == adbi.KEYCODE_UNKNOWN {
-			switch ch {
-			case 117:
-				cmndr.Raw("swipe 700 120 700 0")
-			case 100:
-				cmndr.Raw("swipe 700 0 700 120")
-			}
-
-			continue
-		}
-
 		if err = cmndr.Signal(event); err != nil {
 			return err
 		}
@@ -71,6 +59,8 @@ var defaultBindings = `{
 		"\b":   "KEYCODE_BACK",
 		"\t":   "KEYCODE_TAB",
 		"\r":   "KEYCODE_ENTER",
+        "\d":   "KEYCODE_MOUSE_SCROLL_DOWN",
+        "\u":   "KEYCODE_MOUSE_SCROLL_UP",
 		" ":    "KEYCODE_SPACE",
 		"-":    "KEYCODE_VOLUME_DOWN",
 		"=":    "KEYCODE_VOLUME_UP",
@@ -98,10 +88,5 @@ var defaultBindings = `{
 		"u":    "KEYCODE_MENU",
 		"v":    "KEYCODE_HELP",
 		"w":    "KEYCODE_WAKEUP"
-	},
-    "rawbindings": {
-		"U":    "swipe 700 120 700 0",
-		"D":    "swipe 700 0 700 120"
-    }
-}
+	}}
 `
